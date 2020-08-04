@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="generate-num" class="form-control text-center" type="text" placeholder="Click On Generate Pin">
+                    <button onclick="generateRandom()" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="number-input" class="form-control text-center" type="text" placeholder="Type Your Generate Pin Here">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div onclick="showValue(7)" class="button">7</div>
+                              <div onclick="showValue(8)" class="button">8</div>
+                              <div onclick="showValue(9)" class="button">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div onclick="showValue(4)" class="button">4</div>
+                              <div onclick="showValue(5)" class="button">5</div>
+                              <div onclick="showValue(6)" class="button">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div onclick="showValue(1)" class="button">1</div>
+                              <div onclick="showValue(2)" class="button">2</div>
+                              <div onclick="showValue(3)" class="button">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div onclick="backSpace()" class="button"><</div>
+                                <div onclick="showValue(0)" class="button">0</div>
+                                <div onclick="clearAll()" class="button">C</div>
+                            </div>
+                            <div>
+                                <button id="submit-area" onclick="submitButton()" type="submit" class="submit-btn">Submit</button>
+                                <p id="action-notify" class="action-left">3 try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p id="matchNotification1" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="matchNotification2" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+
+    <script>
+        // Active Notification Invisible
+        document.getElementById("matchNotification1").style.display = "none";
+        document.getElementById("matchNotification2").style.display = "none";
+        // generate random number
+        function generateRandom() {
+            document.getElementById('generate-num').value = Math.round(Math.random() * 8999 + 1000);
+        }
+        document.getElementById('generate-num').value = "";
+        // Active Number Buttons
+        function showValue(num) {
+            document.getElementById('number-input').value = document.getElementById('number-input').value + num;
+        }
+        document.getElementById('number-input').value = "";
+        // Active Submit Button
+        function submitButton() {
+            let inputNumber = document.getElementById('number-input').value;
+            let generateNumber = document.getElementById('generate-num').value;
+            if (inputNumber == "" && generateNumber == "") {
+                alert('Please Generate Pin');
+            }
+            else if (generateNumber == inputNumber) {
+                document.getElementById("matchNotification1").style.display = "none";
+                document.getElementById("matchNotification2").style.display = "block";
+            }
+            else{
+                document.getElementById("matchNotification1").style.display = "block";
+                document.getElementById("matchNotification2").style.display = "none";
+                tryLeft();
+            }
+        }
+        // Active Clear Button
+        function clearAll() {
+            document.getElementById('number-input').value = "";
+        }
+        // Active Backspace Button 
+        function backSpace() {
+            let inputValue = document.getElementById('number-input').value;
+            document.getElementById('number-input').value = inputValue.substring(0, inputValue.length - 1);
+        }
+        // Active Left Notification
+        let count = 0;
+        function tryLeft() {
+            let numberInput = document.getElementById('number-input').value;
+            let generateInput = document.getElementById('generate-num').value;
+            count++
+            console.log(count);
+            if (count == 1 && numberInput !== generateInput) {
+                document.getElementById("action-notify").innerText = "2 try left";
+            }
+            else if (count == 2 && numberInput !== generateInput) {
+                document.getElementById("action-notify").innerText = "1 try left";                
+            }
+            else if (count == 3 && numberInput !== generateInput) {
+                document.getElementById("action-notify").innerText = "0 try left";
+                document.getElementById("submit-area").disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
